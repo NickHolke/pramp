@@ -42,3 +42,31 @@ function shortestCellPath(grid, sr, sc, tr, tc) {
 
 	// your code goes here
 }
+
+function shortestCellPath(grid, sr, sc, tr, tc) {
+  let q = [];
+  q.unshift([sr, sc, 0]);
+  let seen = new Set();
+  seen.add(`${sr}, ${sc}`);
+  let rLength = grid.length, cLength = grid[0].length;
+
+  while (q.length) {
+      let [r, c, depth] = q.pop()
+      if (r === tr && c === tc) return depth;
+
+      [[r + 1, c], [r - 1, c], [r, c + 1], [r, c - 1]].forEach((pos) => {
+          [nr, nc] = pos;
+          let seenKey = `${nr},${nc}`;
+          if (nr >= 0 && nr < rLength && nc >= 0 && nc < cLength && grid[nr][nc] === 1 && !seen.has(seenKey)) {
+              q.unshift([nr, nc, depth + 1]);
+              seen.add(seenKey);
+          }
+      })
+  }
+
+  return -1;
+}
+
+/* 
+  Time and Space O(row * col). worst case we check every spot and store every spot in seen set
+*/
